@@ -60,7 +60,7 @@ export default function Hero() {
         animate={{ opacity: 1, x: 0, y: 0 }}
         transition={{ duration: 1.3, ease: "easeOut", delay: 0.25 }}
         className="absolute right-[-1%] top-0 bottom-0 z-[2] pointer-events-none hidden md:block"
-        style={{ width: "65%", height: "100%" }}
+        style={{ width: "40%", height: "100%" }}
       >
         <Image
           src="/wall.png"
@@ -68,7 +68,7 @@ export default function Hero() {
           fill
           style={{ objectFit: "contain", objectPosition: "right center" }}
           priority
-          sizes="55vw"
+          sizes="60vw"
         />
       </motion.div>
 
