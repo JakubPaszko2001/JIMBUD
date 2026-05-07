@@ -59,7 +59,7 @@ export default function Hero() {
         initial={{ opacity: 0, x: 80, y: 10 }}
         animate={{ opacity: 1, x: 0, y: 0 }}
         transition={{ duration: 1.3, ease: "easeOut", delay: 0.25 }}
-        className="absolute right-[-1%] top-0 bottom-0 z-[2] pointer-events-none hidden md:block"
+        className="absolute right-[10%] top-0 bottom-0 z-[2] pointer-events-none hidden md:block"
         style={{ width: "40%", height: "100%" }}
       >
         <Image
