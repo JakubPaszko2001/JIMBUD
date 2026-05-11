@@ -29,7 +29,9 @@ export default function Navbar() {
   return (
     <>
       <nav
-        className={`fixed top-0 left-0 right-0 z-[100] px-8 md:px-16 py-5 flex items-center justify-between transition-all duration-300 ${scrolled ? "bg-[rgba(14,13,11,0.95)] backdrop-blur-xl" : ""
+        className={`fixed top-0 left-0 right-0 z-[100] px-8 md:px-16 py-5 flex items-center justify-between transition-all duration-300 border-b ${scrolled
+            ? "bg-[rgba(14,13,11,0.95)] backdrop-blur-xl border-white/10 shadow-[0_1px_0_0_rgba(255,255,255,0.04)]"
+            : "bg-[rgba(14,13,11,0.35)] backdrop-blur-md border-white/[0.06]"
           }`}
       >
         <a
@@ -39,7 +41,7 @@ export default function Navbar() {
           JIM<span className="text-[var(--accent)]">BUD</span>
         </a>
 
-        <ul className="hidden md:flex gap-10 list-none">
+        <ul className="hidden lg:flex gap-10 list-none">
           {links.map(({ href, label }) => (
             <li key={href}>
               <a
@@ -57,13 +59,13 @@ export default function Navbar() {
             href="https://www.facebook.com/profile.php?id=61589351493263"
             target="_blank"
             rel="noopener noreferrer"
-            className="hidden md:block font-cond text-[0.75rem] tracking-[0.15em] uppercase bg-[var(--accent)] hover:bg-[var(--accent2)] text-white px-6 py-2.5 transition-colors duration-200"
+            className="hidden lg:block font-cond text-[0.75rem] tracking-[0.15em] uppercase bg-[var(--accent)] hover:bg-[var(--accent2)] text-white px-6 py-2.5 transition-colors duration-200"
           >
             Wycena projektu
           </a>
 
           <button
-            className="md:hidden flex flex-col justify-center gap-[5px] w-8 h-8 cursor-pointer"
+            className="lg:hidden flex flex-col justify-center gap-[5px] w-8 h-8 cursor-pointer"
             onClick={() => setOpen((v) => !v)}
             aria-label="Menu"
           >

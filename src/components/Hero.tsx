@@ -1,6 +1,5 @@
 "use client";
 
-import Image from "next/image";
 import { motion } from "framer-motion";
 
 const NOISE_SVG = `url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.4'/%3E%3C/svg%3E")`;
@@ -25,14 +24,38 @@ export default function Hero() {
   return (
     <section
       id="hero"
-      className="min-h-screen flex flex-col justify-center px-8 md:px-16 pt-24 pb-12 relative overflow-hidden"
+      className="min-h-screen flex flex-col px-8 md:px-16 pt-24 pb-12 relative overflow-hidden"
     >
-      {/* Background gradient */}
+      {/* Background video — desktop */}
+      <video
+        className="absolute inset-0 z-0 w-full h-full object-cover hidden md:block"
+        src="/dekstop-video.mp4"
+        autoPlay
+        loop
+        muted
+        playsInline
+        preload="auto"
+        aria-hidden="true"
+      />
+
+      {/* Background video — mobile */}
+      <video
+        className="absolute inset-0 z-0 w-full h-full object-cover block md:hidden"
+        src="/mobile-video.mp4"
+        autoPlay
+        loop
+        muted
+        playsInline
+        preload="auto"
+        aria-hidden="true"
+      />
+
+      {/* Background gradient overlay (darkens video for legibility) */}
       <div
-        className="absolute inset-0 z-0"
+        className="absolute inset-0 z-[1]"
         style={{
           background:
-            "linear-gradient(160deg, transparent 40%, rgba(14,13,11,0.97) 100%), radial-gradient(ellipse at 70% 25%, #2d1b0a 0%, #0e0d0b 65%)",
+            "linear-gradient(160deg, rgba(14,13,11,0.55) 0%, rgba(14,13,11,0.85) 100%)",
         }}
       />
 
@@ -54,27 +77,20 @@ export default function Hero() {
         }}
       />
 
-      {/* Wall image — right side, like the screenshot */}
-      <motion.div
-        initial={{ opacity: 0, x: 80, y: 10 }}
-        animate={{ opacity: 1, x: 0, y: 0 }}
-        transition={{ duration: 1.3, ease: "easeOut", delay: 0.25 }}
-        className="absolute right-[10%] top-0 bottom-0 z-[2] pointer-events-none hidden md:block"
-        style={{ width: "40%", height: "100%" }}
-      >
-        <Image
-          src="/wall.png"
-          alt="Wyburzona ściana — JIMBUD"
-          fill
-          style={{ objectFit: "contain", objectPosition: "right center" }}
-          priority
-          sizes="60vw"
-        />
-      </motion.div>
+      {/* Translucent blurred panel — full section height, fades out toward center */}
+      <div
+        className="absolute left-0 top-0 bottom-0 z-[2] w-full md:w-[56%] backdrop-blur-md bg-[rgba(14,13,11,0.35)] pointer-events-none"
+        style={{
+          WebkitMaskImage:
+            "linear-gradient(90deg, rgba(0,0,0,1) 0%, rgba(0,0,0,1) 35%, rgba(0,0,0,0.6) 70%, rgba(0,0,0,0) 100%)",
+          maskImage:
+            "linear-gradient(90deg, rgba(0,0,0,1) 0%, rgba(0,0,0,1) 35%, rgba(0,0,0,0.6) 70%, rgba(0,0,0,0) 100%)",
+        }}
+      />
 
-      {/* Main text content — left side */}
+      {/* Left content strip — text and CTA, vertically centered */}
       <motion.div
-        className="relative z-[3] max-w-full md:max-w-[48%]"
+        className="relative z-[3] flex flex-col justify-center self-stretch flex-1 w-full md:max-w-[52%] md:pr-16"
         variants={container}
         initial="hidden"
         animate="show"
