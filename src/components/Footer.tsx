@@ -20,19 +20,6 @@ export default function Footer() {
       >
         © {year} JIMBUD Sp. z o.o. · Profesjonalne Rozbiórki · Białystok
       </p>
-
-      <div className="flex gap-6">
-        {["Polityka prywatności", "Regulamin"].map((label) => (
-          <a
-            key={label}
-            href="#"
-            className="font-cond text-[0.65rem] tracking-[0.15em] uppercase transition-colors duration-200 hover:text-[var(--text)]"
-            style={{ color: "var(--muted)" }}
-          >
-            {label}
-          </a>
-        ))}
-      </div>
     </footer>
   );
 }

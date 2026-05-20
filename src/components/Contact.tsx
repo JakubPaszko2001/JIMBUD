@@ -166,8 +166,8 @@ export default function Contact() {
                 status === "sent"
                   ? "#22a24a"
                   : status === "sending"
-                  ? "var(--muted)"
-                  : "var(--accent)",
+                    ? "var(--muted)"
+                    : "var(--accent)",
             }}
           >
             {status === "idle" && "Wyślij zapytanie →"}

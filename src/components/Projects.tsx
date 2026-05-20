@@ -1,6 +1,8 @@
 "use client";
 
 import { motion } from "framer-motion";
+import Image from "next/image";
+import { useRef, useState } from "react";
 
 const projects = [
   {
@@ -46,6 +48,16 @@ const projects = [
 ];
 
 export default function Projects() {
+  const sliderRef = useRef<HTMLDivElement>(null);
+  const [position, setPosition] = useState(50);
+
+  const updatePosition = (clientX: number) => {
+    const rect = sliderRef.current?.getBoundingClientRect();
+    if (!rect) return;
+    const pct = ((clientX - rect.left) / rect.width) * 100;
+    setPosition(Math.max(0, Math.min(100, pct)));
+  };
+
   return (
     <section id="projekty" className="px-8 md:px-16 py-28 md:py-36">
       <motion.div
@@ -67,88 +79,65 @@ export default function Projects() {
         className="font-display leading-[0.9] mb-16"
         style={{ fontSize: "clamp(2.5rem, 6vw, 5.5rem)" }}
       >
-        NASZE
-        <br />
-        REALIZACJE
+        PRZED I PO:
       </motion.h2>
 
-      {/* Grid */}
-      <div
-        className="grid gap-[2px]"
-        style={{
-          gridTemplateColumns: "repeat(3, 1fr)",
-          gridTemplateRows: "300px 300px",
-          background: "var(--border)",
-        }}
+      {/* Before / After slider */}
+      <motion.div
+        initial={{ opacity: 0, y: 30 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.7, delay: 0.2 }}
+        className="flex justify-center mb-16"
       >
-        {projects.map((p, i) => (
-          <motion.div
-            key={p.title}
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            viewport={{ once: true }}
-            transition={{ delay: i * 0.1, duration: 0.6 }}
-            className="relative overflow-hidden group cursor-pointer"
-            style={{
-              gridColumn: i === 0 ? "1 / 2" : undefined,
-              gridRow: i === 0 ? "1 / 3" : undefined,
-            }}
+        <div
+          ref={sliderRef}
+          onMouseMove={(e) => updatePosition(e.clientX)}
+          onTouchMove={(e) => updatePosition(e.touches[0].clientX)}
+          className="relative w-full max-w-3xl aspect-[4/3] overflow-hidden border border-[var(--border)] select-none"
+        >
+          {/* PRZED — warstwa bazowa */}
+          <Image
+            src="/przed.png"
+            alt="Stan przed rozbiórką"
+            fill
+            sizes="(max-width: 768px) 100vw, 768px"
+            className="object-cover pointer-events-none"
+            priority={false}
+          />
+          <div className="absolute top-4 left-4 z-20 font-cond text-[0.62rem] tracking-[0.28em] uppercase text-white bg-black/60 backdrop-blur-sm px-3 py-1.5">
+            Przed
+          </div>
+
+          {/* PO — warstwa przycinana clipPath-em */}
+          <div
+            className="absolute inset-0 overflow-hidden"
+            style={{ clipPath: `inset(0 0 0 ${position}%)` }}
           >
-            {/* BG */}
-            <motion.div
-              className="absolute inset-0"
-              style={{ background: p.gradient }}
-              whileHover={{ scale: 1.04 }}
-              transition={{ duration: 0.6, ease: "easeOut" }}
+            <Image
+              src="/po.png"
+              alt="Stan po rozbiórce"
+              fill
+              sizes="(max-width: 768px) 100vw, 768px"
+              className="object-cover pointer-events-none"
+              priority={false}
             />
-
-            {/* Accent glow */}
-            <div
-              className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
-              style={{ background: p.accent }}
-            />
-
-            {/* Noise overlay */}
-            <div
-              className="absolute inset-0 opacity-20 mix-blend-overlay"
-              style={{
-                backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.4'/%3E%3C/svg%3E")`,
-                backgroundSize: "150px",
-              }}
-            />
-
-            {/* Grid lines */}
-            <div className="absolute inset-0 opacity-5"
-              style={{
-                backgroundImage: "linear-gradient(var(--text) 1px, transparent 1px), linear-gradient(90deg, var(--text) 1px, transparent 1px)",
-                backgroundSize: "40px 40px",
-              }}
-            />
-
-            {/* Content */}
-            <div className="absolute inset-0 p-6 md:p-8 flex flex-col justify-end">
-              <div className="font-cond text-[0.62rem] tracking-[0.28em] uppercase text-[var(--accent)] mb-2">
-                {p.type} · {p.year}
-              </div>
-              <div
-                className="font-display leading-tight group-hover:text-[var(--accent)] transition-colors duration-300"
-                style={{ fontSize: i === 0 ? "clamp(1.4rem, 2.5vw, 2rem)" : "clamp(1rem, 1.8vw, 1.4rem)" }}
-              >
-                {p.title}
-              </div>
+            <div className="absolute top-4 right-4 z-20 font-cond text-[0.62rem] tracking-[0.28em] uppercase text-white bg-[var(--accent)] px-3 py-1.5">
+              Po
             </div>
+          </div>
 
-            {/* Hover arrow */}
-            <motion.div
-              className="absolute top-6 right-6 w-8 h-8 border border-[var(--accent)] flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
-              initial={false}
-            >
-              <span className="text-[var(--accent)] text-sm">↗</span>
-            </motion.div>
-          </motion.div>
-        ))}
-      </div>
-
+          {/* Linia + uchwyt */}
+          <div
+            className="absolute top-0 bottom-0 w-px bg-[var(--accent)] pointer-events-none z-30"
+            style={{ left: `${position}%` }}
+          >
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-12 h-12 rounded-full border-2 border-[var(--accent)] bg-[var(--bg)]/80 backdrop-blur-sm flex items-center justify-center">
+              <span className="text-[var(--accent)] text-sm tracking-widest">⇄</span>
+            </div>
+          </div>
+        </div>
+      </motion.div>
       <motion.div
         initial={{ opacity: 0, y: 16 }}
         whileInView={{ opacity: 1, y: 0 }}
